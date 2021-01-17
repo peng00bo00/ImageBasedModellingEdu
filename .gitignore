@@ -1,5 +1,6 @@
 .vs/
 .vscode/
+.idea/
 
 ### Output and Cache Directories ###
 /External/
