@@ -248,6 +248,7 @@ int main(int argc, char *argv[]){
         std::cout << "Select 8 random points ..." << std::endl;
         std::set<int> indices;
         while(indices.size()<8){
+            std::cout << "Gerenate a random number: " << util::system::rand_int() % corr_all.size() << std::endl;
             indices.insert(util::system::rand_int() % corr_all.size());
         }
         std::cout << "Selection complete!" << std::endl;
