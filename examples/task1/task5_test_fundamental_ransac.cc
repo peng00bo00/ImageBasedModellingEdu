@@ -250,6 +250,7 @@ int main(int argc, char *argv[]){
         while(indices.size()<8){
             indices.insert(util::system::rand_int() % corr_all.size());
         }
+        std::cout << "Selection complete!" << std::endl;
 
         math::Matrix<double, 3, 8> pset1, pset2;
         std::set<int>::const_iterator iter = indices.cbegin();
