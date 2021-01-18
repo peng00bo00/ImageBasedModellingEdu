@@ -245,6 +245,7 @@ int main(int argc, char *argv[]){
     for(int i=0; i<n_iterations; i++){
 
         /* 1.0 随机找到8对不重复的匹配点 */
+        std::cout << "Select 8 random points ..." << std::endl;
         std::set<int> indices;
         while(indices.size()<8){
             indices.insert(util::system::rand_int() % corr_all.size());
@@ -265,10 +266,12 @@ int main(int argc, char *argv[]){
         }
 
         /*2.0 8点法估计相机基础矩阵*/
+        std::cout << "Estimate F matrix ..." << std::endl;
         FundamentalMatrix F;
         calc_fundamental_8_point(pset1, pset2,F);
 
         /*3.0 统计所有的内点个数*/
+        std::cout << "Find inlier points ..." << std::endl;
         std::vector<int> inlier_indices = find_inliers(corr_all, F, inlier_thresh);
 
         if(inlier_indices.size()> best_inliers.size()){
