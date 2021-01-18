@@ -41,9 +41,7 @@ int  calc_ransac_iterations (double p,
 
     /** TODO HERE
      * Coding here**/
-    double numerator = std::log(1.0 - z);
-    double denominator = std::log(1.0 - math::fastpow(p, K));
-    double M = numerator / denominator;
+    double M = std::log(1.0 - z) / std::log(1.0 - math::fastpow(p, K));
 
     return static_cast<int>(math::round(M));
 
@@ -204,7 +202,7 @@ int main(int argc, char *argv[]){
 
     /** 加载归一化后的匹配对 */
     sfm::Correspondences2D2D corr_all;
-    std::ifstream in("./examples/task1/correspondences.txt");
+    std::ifstream in("/home/pengbo/ImageBasedModellingEdu/examples/task1/correspondences.txt");
     assert(in.is_open());
 
     std::string line, word;
@@ -245,14 +243,10 @@ int main(int argc, char *argv[]){
     for(int i=0; i<n_iterations; i++){
 
         /* 1.0 随机找到8对不重复的匹配点 */
-        std::cout << "Select 8 random points ..." << std::endl;
         std::set<int> indices;
         while(indices.size() < 8){
-            std::cout << "Current size = " << indices.size() << ", Gerenate a random number: ";
-            std::cout << util::system::rand_int() % corr_all.size() << std::endl;
             indices.insert(util::system::rand_int() % corr_all.size());
         }
-        std::cout << "Selection complete!" << std::endl;
 
         math::Matrix<double, 3, 8> pset1, pset2;
         std::set<int>::const_iterator iter = indices.cbegin();
@@ -269,20 +263,18 @@ int main(int argc, char *argv[]){
         }
 
         /*2.0 8点法估计相机基础矩阵*/
-        std::cout << "Estimate F matrix ..." << std::endl;
         FundamentalMatrix F;
         calc_fundamental_8_point(pset1, pset2,F);
 
         /*3.0 统计所有的内点个数*/
-        std::cout << "Find inlier points ..." << std::endl;
         std::vector<int> inlier_indices = find_inliers(corr_all, F, inlier_thresh);
 
         if(inlier_indices.size()> best_inliers.size()){
 
-           std::cout << "RANSAC-F: Iteration " << i
-                     << ", inliers " << inlier_indices.size() << " ("
-                     << (100.0 * inlier_indices.size() / corr_all.size())
-                     << "%)" << std::endl;
+        //    std::cout << "RANSAC-F: Iteration " << i
+        //              << ", inliers " << inlier_indices.size() << " ("
+        //              << (100.0 * inlier_indices.size() / corr_all.size())
+        //              << "%)" << std::endl;
             best_inliers.swap(inlier_indices);
         }
     }
