@@ -247,9 +247,8 @@ int main(int argc, char *argv[]){
         /* 1.0 随机找到8对不重复的匹配点 */
         std::cout << "Select 8 random points ..." << std::endl;
         std::set<int> indices;
-        std::cout << "Select 8 random points ..." << std::endl;
-        while(indices.size()<8){
-            std::cout << "Gerenate a random number: ";
+        while(indices.size() < 8){
+            std::cout << "Current size = " << indices.size() << ", Gerenate a random number: ";
             std::cout << util::system::rand_int() % corr_all.size() << std::endl;
             indices.insert(util::system::rand_int() % corr_all.size());
         }
