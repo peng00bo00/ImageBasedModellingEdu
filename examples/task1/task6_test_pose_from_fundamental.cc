@@ -75,7 +75,7 @@ math::Vec3d triangulation(math::Vec2d const & p1
         A(3, i) = p2[1]*P2(2, i) - P2(1, i);
     }
 
-    std::cout<<"A: \n"<<std::endl;
+    std::cout<<"A: \n" << A << std::endl;
     std::cout<<"A for first pose should be:\n"
              <<"-0.972222 0 0.180123 0\n"
              <<"-0 -0.972222 -0.156584 -0\n"
@@ -243,8 +243,8 @@ int main(int argc, char* argv[]){
     math::Vec3d t;
     if(calc_cam_poses(F, f1, f2, R, t)){
         std::cout<<"Correct pose found!"<<std::endl;
-        std::cout<<"R: "<<R<<std::endl;
-        std::cout<<"t: "<<t<<std::endl;
+        std::cout<<"R: \n"<<R<<std::endl;
+        std::cout<<"t: \n"<<t<<std::endl;
     }
 
     std::cout<<"Result should be: \n";

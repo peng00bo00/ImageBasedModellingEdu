@@ -41,7 +41,11 @@ int  calc_ransac_iterations (double p,
 
     /** TODO HERE
      * Coding here**/
-    double M = std::log(1.0 - z) / std::log(1.0 - math::fastpow(p, K));
+    double numerator = std::log(1.0 - z);
+    double denominator = std::log(1.0 - math::fastpow(p, K));
+    double M = numerator / denominator;
+
+    std::cout << "M = " << M << std::endl;
 
     return static_cast<int>(math::round(M));
 
