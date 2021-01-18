@@ -92,18 +92,13 @@ FundamentalMatrix fundamental_8_point (math::Matrix<double, 3, 8> const& points1
     
 
     // SVD
-    math::Matrix<double, 9, 9> v;
-    math::matrix_svd<double, 8, 9>(A, nullptr, nullptr, &v);
-    math::Vector<double, 9> f = v.col(8);
+    math::Matrix<double, 9, 9> vv;
+    math::matrix_svd<double, 8, 9>(A, nullptr, nullptr, &vv);
+    math::Vector<double, 9> f = vv.col(8);
 
-    for (size_t i = 0; i < 3; i++)
-    {
-        for (size_t j = 0; j < 3; j++)
-        {
-            F(i, j) = v[i*3 + j];
-        }
-        
-    }
+    F(0,0) = f[0]; F(0,1) = f[1]; F(0,2) = f[2];
+    F(1,0) = f[3]; F(1,1) = f[4]; F(1,2) = f[5];
+    F(2,0) = f[6]; F(2,1) = f[7]; F(2,2) = f[8];
     
     // constraints
     math::Matrix<double, 3, 3> U, S, V;

@@ -50,13 +50,13 @@ math::Vec3d triangulation(math::Vec2d const & p1
     math::Matrix<double, 3, 1> Kt2(*(K2 * t2));
     P2 = KR2.hstack(Kt2);
 
-    std::cout<<"P1: "<<P1<<std::endl;
+    std::cout<<"P1: \n"<<P1<<std::endl;
     std::cout<<"P1 for fist pose should be\n"
              <<"0.972222 0 0 0\n"
              <<"0 0.972222 0 0\n"
              <<"0 0 1 0\n";
 
-    std::cout<<"P2: "<<P2<<std::endl;
+    std::cout<<"P2: \n"<<P2<<std::endl;
     std::cout<<"P2 for fist pose should be\n"
              <<" -0.957966 0.165734 -0.00707496 0.0774496\n"
              <<"0.164089 0.952816 0.102143 0.967341\n"
@@ -75,7 +75,7 @@ math::Vec3d triangulation(math::Vec2d const & p1
         A(3, i) = p2[1]*P2(2, i) - P2(1, i);
     }
 
-    std::cout<<"A: "<<std::endl;
+    std::cout<<"A: \n"<<std::endl;
     std::cout<<"A for first pose should be:\n"
              <<"-0.972222 0 0.180123 0\n"
              <<"-0 -0.972222 -0.156584 -0\n"
@@ -136,7 +136,7 @@ bool calc_cam_poses(FundamentalMatrix const &F
      */
 
 
-    std::cout<<"EssentialMatrix result is "<<E<<std::endl;
+    std::cout<<"EssentialMatrix result is \n"<<E<<std::endl;
     std::cout<<"EssentialMatrix should be: \n"
              <<"-0.00490744 -0.0146139 0.34281\n"
              <<"0.0212215 -0.000748851 -0.0271105\n"
