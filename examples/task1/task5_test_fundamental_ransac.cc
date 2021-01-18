@@ -45,8 +45,6 @@ int  calc_ransac_iterations (double p,
     double denominator = std::log(1.0 - math::fastpow(p, K));
     double M = numerator / denominator;
 
-    std::cout << "M = " << M << std::endl;
-
     return static_cast<int>(math::round(M));
 
 
@@ -275,10 +273,10 @@ int main(int argc, char *argv[]){
 
         if(inlier_indices.size()> best_inliers.size()){
 
-//            std::cout << "RANSAC-F: Iteration " << i
-//                      << ", inliers " << inlier_indices.size() << " ("
-//                      << (100.0 * inlier_indices.size() / corr_all.size())
-//                      << "%)" << std::endl;
+           std::cout << "RANSAC-F: Iteration " << i
+                     << ", inliers " << inlier_indices.size() << " ("
+                     << (100.0 * inlier_indices.size() / corr_all.size())
+                     << "%)" << std::endl;
             best_inliers.swap(inlier_indices);
         }
     }
