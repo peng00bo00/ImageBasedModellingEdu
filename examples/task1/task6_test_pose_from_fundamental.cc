@@ -124,8 +124,8 @@ bool calc_cam_poses(FundamentalMatrix const &F
 {
     /* 相机内参矩阵 */
     math::Matrix3d K1(0.0), K2(0.0);
-    K1(0, 0) = K1(1, 1) = f1; K1(2,2)=1.0;
-    K2(0, 0) = K2(1, 1) = f2; K2(2,2) =1.0;
+    K1(0, 0) = K1(1, 1) = f1; K1(2,2) = 1.0;
+    K2(0, 0) = K2(1, 1) = f2; K2(2,2) = 1.0;
 
     /**  TODO BERE
      * 计算本质矩阵E*/
