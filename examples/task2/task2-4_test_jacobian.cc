@@ -59,44 +59,79 @@ void jacobian(sfm::ba::Camera const& cam,
     const double k1 = cam.distortion[1];
 
     // 相机焦距的偏导数
-    cam_x_ptr[0] = 0.0;
-    cam_y_ptr[0] = 0.0;
+    // transform to camera coordinate
+    double xc = R[0] * X[0] + R[1] * X[1] + R[2] * X[2] + t[0];
+    double yc = R[3] * X[0] + R[4] * X[1] + R[5] * X[2] + t[1];
+    double zc = R[6] * X[0] + R[7] * X[1] + R[8] * X[2] + t[2];
+
+    double x = xc / zc;
+    double y = yc / zc;
+
+    double r2= x * x + y * y;
+    double r4= r2 * r2;
+    double d = 1 + (k0 + k1*r2) * r2;
+
+    cam_x_ptr[0] = d * x;
+    cam_y_ptr[0] = d * y;
 
     // 相机径向畸变的偏导数
-    cam_x_ptr[1] = 0.0;
-    cam_x_ptr[2] = 0.0;
-    cam_y_ptr[1] = 0.0;
-    cam_y_ptr[2] = 0.0;
-
-    // 相机将向畸变系数的偏导数
-    cam_x_ptr[1] = 0.0;
-    cam_x_ptr[2] = 0.0;
-    cam_y_ptr[1] = 0.0;
-    cam_y_ptr[2] = 0.0;
+    cam_x_ptr[1] = f * x * r2;
+    cam_x_ptr[2] = f * x * r4;
+    cam_y_ptr[1] = f * y * r2;
+    cam_y_ptr[2] = f * y * r4;
 
     // 相机平移向量的偏导数
-    cam_x_ptr[3] = 0.0;
-    cam_x_ptr[4] = 0.0;
-    cam_x_ptr[5] = 0.0;
-    cam_y_ptr[3] = 0.0;
-    cam_y_ptr[4] = 0.0;
-    cam_y_ptr[5] = 0.0;
+    double dx_xc = 1 / zc;
+    double dx_zc =-x / zc;
+    double dy_yc = 1 / zc;
+    double dy_zc =-y / zc;
+
+    double du_x = f * d;
+    double dv_y = f * d;
+    double dd_r2= k0 + 2 * k1 * r2;
+
+    double dr2_xc = 2 * x / zc;
+    double dr2_yc = 2 * y / zc;
+    double dr2_zc =-2 * r2/ zc;
+
+    double du_d = f * x;
+    double dv_d = f * y;
+
+    double dd_xc = (k0 + 2 * k1 * r2) * 2 * x / zc;
+    double dd_yc = (k0 + 2 * k1 * r2) * 2 * y / zc;
+    double dd_zc =-(k0 + 2 * k1 * r2) * 2 * r2/ zc;
+
+    cam_x_ptr[3] = du_d * dd_xc + du_x * dx_xc; // du_xc
+    cam_x_ptr[4] = du_d * dd_yc + du_x * 0;     // du_yc
+    cam_x_ptr[5] = du_d * dd_zc + du_x * dx_zc; // du_zc
+    cam_y_ptr[3] = dv_d * dd_xc + dv_y * 0;     // dv_xc
+    cam_y_ptr[4] = dv_d * dd_yc + dv_y * dy_yc; // dv_yc
+    cam_y_ptr[5] = dv_d * dd_zc + dv_y * dy_zc; // dv_zc
 
     // 相机旋转矩阵的偏导数
-    cam_x_ptr[6] = 0.0;
-    cam_x_ptr[7] = 0.0;
-    cam_x_ptr[8] = 0.0;
-    cam_y_ptr[6] = 0.0;
-    cam_y_ptr[7] = 0.0;
-    cam_y_ptr[8] = 0.0;
+    double dyc_w1 = R[6] * X[0] + R[7] * X[1] + R[8] * X[2];
+    double dxc_w2 =-R[3] * X[0] - R[4] * X[1] - R[5] * X[2];
+
+    double dyc_w0 =-R[6] * X[0] - R[7] * X[1] - R[8] * X[2];
+    double dyc_w2 = R[0] * X[0] + R[1] * X[1] + R[2] * X[2];
+
+    double dzc_w0 = R[3] * X[0] + R[4] * X[1] + R[5] * X[2];
+    double dzc_w1 =-R[0] * X[0] - R[1] * X[1] - R[2] * X[2];
+
+    cam_x_ptr[6] = cam_x_ptr[4] * dyc_w0 + cam_x_ptr[5] * dzc_w0;
+    cam_x_ptr[7] = cam_x_ptr[3] * dyc_w1 + cam_x_ptr[5] * dzc_w1;
+    cam_x_ptr[8] = cam_x_ptr[3] * dxc_w2 + cam_x_ptr[4] * dyc_w2;
+    cam_y_ptr[6] = cam_y_ptr[4] * dyc_w0 + cam_y_ptr[5] * dzc_w0;
+    cam_y_ptr[7] = cam_y_ptr[3] * dyc_w1 + cam_y_ptr[5] * dzc_w1;
+    cam_y_ptr[8] = cam_y_ptr[3] * dxc_w2 + cam_y_ptr[4] * dyc_w2;
 
     // 三维点的偏导数
-    point_x_ptr[0] = 0.0;
-    point_x_ptr[1] = 0.0;
-    point_x_ptr[2] = 0.0;
-    point_y_ptr[0] = 0.0;
-    point_y_ptr[1] = 0.0;
-    point_y_ptr[2] = 0.0;
+    point_x_ptr[0] = cam_x_ptr[3] * R[0] + cam_x_ptr[4] * R[3] + cam_x_ptr[5] * R[6];
+    point_x_ptr[1] = cam_x_ptr[3] * R[1] + cam_x_ptr[4] * R[4] + cam_x_ptr[5] * R[7];
+    point_x_ptr[2] = cam_x_ptr[3] * R[2] + cam_x_ptr[4] * R[5] + cam_x_ptr[5] * R[8];
+    point_y_ptr[0] = cam_y_ptr[3] * R[0] + cam_y_ptr[4] * R[3] + cam_y_ptr[5] * R[6];
+    point_y_ptr[1] = cam_y_ptr[3] * R[1] + cam_y_ptr[4] * R[4] + cam_y_ptr[5] * R[7];
+    point_y_ptr[2] = cam_y_ptr[3] * R[2] + cam_y_ptr[4] * R[5] + cam_y_ptr[5] * R[8];
 
 
 
