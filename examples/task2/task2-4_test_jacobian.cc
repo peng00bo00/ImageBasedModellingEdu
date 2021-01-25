@@ -133,10 +133,8 @@ void jacobian(sfm::ba::Camera const& cam,
     point_y_ptr[1] = cam_y_ptr[3] * R[1] + cam_y_ptr[4] * R[4] + cam_y_ptr[5] * R[7];
     point_y_ptr[2] = cam_y_ptr[3] * R[2] + cam_y_ptr[4] * R[5] + cam_y_ptr[5] * R[8];
 
-
-
-
 }
+
 int main(int argc, char*argv[])
 {
 
@@ -172,7 +170,7 @@ int main(int argc, char*argv[])
     jacobian(cam, pt3D, cam_x_ptr, cam_y_ptr, point_x_ptr, point_y_ptr);
 
 
-   std::cout<<"Result is :"<<std::endl;
+    std::cout<<"Result is :"<<std::endl;
     std::cout<<"cam_x_ptr: ";
     for(int i=0; i<9; i++){
         std::cout<<cam_x_ptr[i]<<" ";

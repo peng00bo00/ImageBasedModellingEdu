@@ -433,9 +433,9 @@ double compute_mse (DenseVectorType const& vector_f) {
  * @param point_y_ptr
  */
 void my_jacobian(sfm::ba::Camera const& cam,
-              sfm::ba::Point3D const& point,
-              double* cam_x_ptr, double* cam_y_ptr,
-              double* point_x_ptr, double* point_y_ptr)
+                sfm::ba::Point3D const& point,
+                double* cam_x_ptr, double* cam_y_ptr,
+                double* point_x_ptr, double* point_y_ptr)
 {
     const double f = cam.focal_length;
     const double *R = cam.rotation;
@@ -602,25 +602,25 @@ void analytic_jacobian (SparseMatrixType* jac_cam
         std::size_t point_col = obs.point_id * 3;
 
         for (int j = 0; j < num_cam_params; ++j) {
-           cam_triplets.push_back(SparseMatrixType::Triplet(row_x, cam_col + j, cam_x_ptr[j]));
-           cam_triplets.push_back(SparseMatrixType::Triplet(row_y, cam_col + j, cam_y_ptr[j]));
+            cam_triplets.push_back(SparseMatrixType::Triplet(row_x, cam_col + j, cam_x_ptr[j]));
+            cam_triplets.push_back(SparseMatrixType::Triplet(row_y, cam_col + j, cam_y_ptr[j]));
         }
 
         for (int j = 0; j < 3; ++j) {
             point_triplets.push_back(SparseMatrixType::Triplet(row_x, point_col + j, point_x_ptr[j]));
-                point_triplets.push_back(SparseMatrixType::Triplet(row_y, point_col + j, point_y_ptr[j]));
+            point_triplets.push_back(SparseMatrixType::Triplet(row_y, point_col + j, point_y_ptr[j]));
         }
     }
 
 
     if (jac_cam != nullptr) {
-       jac_cam->allocate(jacobi_rows, camera_cols);
-       jac_cam->set_from_triplets(cam_triplets);
+        jac_cam->allocate(jacobi_rows, camera_cols);
+        jac_cam->set_from_triplets(cam_triplets);
     }
 
     if (jac_points != nullptr) {
-       jac_points->allocate(jacobi_rows, point_cols);
-       jac_points->set_from_triplets(point_triplets);
+        jac_points->allocate(jacobi_rows, point_cols);
+        jac_points->set_from_triplets(point_triplets);
     }
 }
 
