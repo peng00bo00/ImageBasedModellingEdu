@@ -88,11 +88,11 @@ void jacobian(sfm::ba::Camera const& cam,
 
     double du_x = f * d;
     double dv_y = f * d;
-    double dd_r2= k0 + 2 * k1 * r2;
+    // double dd_r2= k0 + 2 * k1 * r2;
 
-    double dr2_xc = 2 * x / zc;
-    double dr2_yc = 2 * y / zc;
-    double dr2_zc =-2 * r2/ zc;
+    // double dr2_xc = 2 * x / zc;
+    // double dr2_yc = 2 * y / zc;
+    // double dr2_zc =-2 * r2/ zc;
 
     double du_d = f * x;
     double dv_d = f * y;
